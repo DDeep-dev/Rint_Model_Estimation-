@@ -1,0 +1,71 @@
+
+%% cell constants
+T_amb=293.15;                   %Ambient Temperature in Kelvin
+Capacity=31000;                 %cell initial capacity in mAh
+cell_length=0.227;               %cell length in meters
+cell_width=0.226;                   %cell width in meters
+cell_thickness=0.0078;              %cell thickness in meters
+A_cell=cell_length*cell_width;       %cell surface area in meter^2
+cell_volume=A_cell*cell_thickness;   %cell volume in m^3
+m_cell=0.72;                            %mass of cell in kg
+Cp_cell=810.5328;               %cell specific heat capacity J/(KgK)
+h_cell=5;                       %convective heat transfer coefficient in W/m^2/K
+
+
+%% Lookup table data 
+SOC_LUT=[0; 0.1; 0.25; 0.5; 0.75; 0.9; 1.0];    %state of charge lookup table data 
+OCV_LUT=[3.49; 3.55; 3.62; 3.71; 3.91; 4.17; 4.19];    %ocv lookup table data
+R_int_LUT=[0.0085; 0.0085; 0.0087; 0.0082; 0.0083; 0.0085; 0.0097]; %internal resistance lookup table data
+
+%% setting the model runtime (set_param is used for setting the model run time)
+set_param('Rint_model_decibel', 'StopTime', '3600')
+
+%% Model simulation 
+sim 'Rint_model_decibel'
+
+%% Results
+figure(1)
+plot(soc(:,1), soc(:,2))
+xlabel ('time(s)')
+ylabel('state of charge(%))')
+grid on
+
+
+figure(2)
+plot(ocv(:,1),ocv(:,2))
+xlabel ('time(s)')
+ylabel('open circuit voltage(V))')
+grid on
+
+
+figure(3)
+plot(ans.temp(:,1), ans.temp(:,2))
+xlabel ('time(s)')
+ylabel('Temperature(K))')
+grid on
+
+
+figure(4)
+plot(ploss(:,1), ploss(:,2))
+xlabel ('time(s)')
+ylabel('power loss(watts))')
+grid on
+
+
+
+figure(5)
+plot(rint(:,1), rint(:,2))
+xlabel ('time(s)')
+ylabel('internal resistance(ohms))')
+grid on
+
+
+figure(6)
+plot(ans.vt(:,1), ans.vt(:,2))
+xlabel ('time(s)')
+ylabel('terminal voltage(V))')
+grid on
+
+
+
+
